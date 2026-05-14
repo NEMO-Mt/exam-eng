@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบทดสอบภาษาอังกฤษ - Tenses & Grammar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&family=Noto+Serif+Thai:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --surface: #FFFFFF;
+    --border: #E2DDD6;
+    --text: #1A1714;
+    --text-muted: #8A8480;
+    --accent: #2D6A4F;
+    --accent-light: #E8F5EE;
+    --danger: #C0392B;
+    --danger-light: #FDECEA;
+    --warning: #B7791F;
+    --warning-light: #FEF3C7;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .container { width: 100%; max-width: 620px; }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp .35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Start Screen ─────────────────────────── */
+  .start-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 1rem;
+  }
+  .start-hero h1 {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: .75rem;
+  }
+  .start-hero p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .meta-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .meta-item {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: .875rem .5rem;
+    text-align: center;
+  }
+  .meta-item .val { font-size: 20px; font-weight: 600; color: var(--text); }
+  .meta-item .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn-primary:hover { opacity: .9; }
+  .btn-primary:active { transform: scale(.98); }
+
+  /* ── Quiz Screen ──────────────────────────── */
+  .quiz-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .prog-bg {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width .3s ease;
+    width: 0%;
+  }
+  .prog-text { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .q-number { font-size: 12px; color: var(--text-muted); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: .6rem; }
+  .q-text { font-size: 17px; font-weight: 500; line-height: 1.6; }
+
+  .choices { display: flex; flex-direction: column; gap: 8px; }
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    text-align: left;
+  }
+  .choice:hover { background: var(--bg); border-color: #C5C0B8; }
+  .choice.selected { background: var(--accent-light); border-color: var(--accent); }
+  .choice.correct  { background: var(--accent-light); border-color: var(--accent); }
+  .choice.wrong    { background: var(--danger-light);  border-color: var(--danger); }
+
+  .choice-lbl {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: background .15s, color .15s;
+  }
+  .choice.selected .choice-lbl { background: var(--accent); color: #fff; }
+  .choice.correct  .choice-lbl { background: var(--accent); color: #fff; }
+  .choice.wrong    .choice-lbl { background: var(--danger);  color: #fff; }
+  .choice-body { font-size: 15px; line-height: 1.5; }
+
+  .warn-msg {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--warning-light);
+    color: var(--warning);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .warn-msg.show { display: flex; }
+
+  /* ── Result Screen ────────────────────────── */
+  .result-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .score-ring {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem;
+    border: 3px solid;
+  }
+  .score-ring.great { border-color: var(--accent); background: var(--accent-light); }
+  .score-ring.ok    { border-color: var(--warning); background: var(--warning-light); }
+  .score-ring.poor  { border-color: var(--danger);  background: var(--danger-light); }
+  .score-ring .pct  { font-size: 26px; font-weight: 700; }
+  .score-ring .frac { font-size: 12px; color: var(--text-muted); }
+  .result-hero h2   { font-family: 'Noto Serif Thai', serif; font-size: 22px; margin-bottom: .4rem; }
+  .result-hero p    { font-size: 14px; color: var(--text-muted); }
+
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; text-align: center; }
+  .stat-box .sv { font-size: 20px; font-weight: 600; }
+  .stat-box .sl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .sv.green { color: var(--accent); }
+  .sv.red   { color: var(--danger); }
+
+  .review-title { font-size: 14px; font-weight: 600; color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: .75rem; }
+  .review-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .rev-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+  .rev-card .rv-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: .75rem; }
+  .rv-icon { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .rv-icon.ok  { background: var(--accent-light); color: var(--accent); }
+  .rv-icon.bad { background: var(--danger-light);  color: var(--danger); }
+  .rv-icon svg { width: 13px; height: 13px; stroke-width: 2.5; }
+  .rv-q { font-size: 15px; font-weight: 500; line-height: 1.5; }
+  .rv-choices { display: flex; flex-direction: column; gap: 6px; margin-bottom: .75rem; }
+  .rv-choice { display: flex; align-items: center; gap: 9px; font-size: 14px; padding: 7px 11px; border-radius: 6px; }
+  .rv-choice.correct { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+  .rv-choice.wrong   { background: var(--danger-light);  color: var(--danger);  font-weight: 500; }
+  .rv-lbl { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .rv-choice.correct .rv-lbl { background: var(--accent); color: #fff; }
+  .rv-choice.wrong   .rv-lbl { background: var(--danger);  color: #fff; }
+  .rv-exp { font-size: 13px; color: var(--text-muted); line-height: 1.6; padding: 9px 12px; background: var(--bg); border-radius: 6px; }
+
+  footer { text-align: center; margin-top: 2rem; font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- START -->
+  <div id="start-screen" class="screen active">
+    <div class="start-hero">
+      <span class="badge">แบบทดสอบภาษาอังกฤษ</span>
+      <h1>Tenses &amp; Grammar<br>ไวยากรณ์ภาษาอังกฤษ</h1>
+      <p>ทำข้อสอบปรนัย 20 ข้อ เรื่อง Tenses และโครงสร้างประโยค<br>ตอบให้ครบทุกข้อ แล้วกดส่งเพื่อดูเฉลยและคะแนน</p>
+      <div class="meta-row">
+        <div class="meta-item"><div class="val">20</div><div class="lbl">ข้อ</div></div>
+        <div class="meta-item"><div class="val">ปรนัย</div><div class="lbl">รูปแบบ</div></div>
+        <div class="meta-item"><div class="val">ไม่จำกัด</div><div class="lbl">เวลา</div></div>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()">เริ่มทำข้อสอบ →</button>
+    </div>
+    <footer>แก้ไขข้อสอบได้ในไฟล์ HTML ส่วน <code>const questions = [...]</code></footer>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-screen" class="screen">
+    <div class="quiz-topbar">
+      <div class="prog-bg"><div class="prog-fill" id="prog-fill"></div></div>
+      <span class="prog-text" id="prog-text">0 / 10</span>
+    </div>
+    <div id="q-list"></div>
+    <div class="warn-msg" id="warn-msg">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      ยังมีข้อที่ยังไม่ได้ตอบ กรุณาทำให้ครบก่อนส่ง
+    </div>
+    <button class="btn-primary" onclick="submitQuiz()">ส่งคำตอบ →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-screen" class="screen">
+    <div class="result-hero">
+      <div class="score-ring" id="score-ring">
+        <span class="pct" id="res-pct"></span>
+        <span class="frac" id="res-frac"></span>
+      </div>
+      <h2 id="res-title"></h2>
+      <p id="res-msg"></p>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="sv green" id="r-correct"></div><div class="sl">ตอบถูก</div></div>
+      <div class="stat-box"><div class="sv red"   id="r-wrong"></div><div class="sl">ตอบผิด</div></div>
+    </div>
+    <p class="review-title">เฉลยรายข้อ</p>
+    <div class="review-cards" id="review-cards"></div>
+    <button class="btn-primary" onclick="restartQuiz()">ทำอีกครั้ง →</button>
+    <footer style="margin-top:1.5rem;">แก้ไขข้อสอบได้ในไฟล์ HTML ส่วน <code>const questions = [...]</code></footer>
+  </div>
+
+</div>
+<script>
+// ─── แก้ไขข้อสอบได้ที่นี่ ───────────────────────────────────────────────────
+const questions = [
+  {
+    q: "I _______ to school every day.",
+    choices: ["go", "goes", "going", "gone"],
+    answer: 0,
+    explanation: "ใช้ go กับประธาน I ใน Present Simple Tense"
+  },
+  {
+    q: "She usually _______ dinner at 6 PM.",
+    choices: ["eat", "eats", "eating", "eaten"],
+    answer: 1,
+    explanation: "ประธานเอกพจน์ \"She\" ต้องเติม s ที่กริยา → eats"
+  },
+  {
+    q: "They _______ a movie right now.",
+    choices: ["watch", "watches", "are watching", "watched"],
+    answer: 2,
+    explanation: "\"right now\" คือเหตุการณ์ที่กำลังเกิดขึ้น ใช้ Present Continuous (are + V-ing)"
+  },
+  {
+    q: "I _______ to Bangkok next month.",
+    choices: ["went", "going", "will go", "go"],
+    answer: 2,
+    explanation: "\"next month\" เป็นเหตุการณ์ในอนาคต ใช้ will + V1"
+  },
+  {
+    q: "He _______ a new bike yesterday.",
+    choices: ["buy", "buys", "buying", "bought"],
+    answer: 3,
+    explanation: "\"yesterday\" คืออดีต ใช้กริยาช่องที่ 2 → bought"
+  },
+  {
+    q: "_______ she like chocolate?",
+    choices: ["Does", "Do", "Is", "Are"],
+    answer: 0,
+    explanation: "คำถามใน Present Simple ประธานเอกพจน์ (she) ใช้ Does"
+  },
+  {
+    q: "I am _______ my homework now.",
+    choices: ["do", "did", "doing", "does"],
+    answer: 2,
+    explanation: "am + doing ใช้กับเหตุการณ์ที่กำลังเกิดขึ้น (Present Continuous)"
+  },
+  {
+    q: "The children _______ in the garden at the moment.",
+    choices: ["play", "played", "are playing", "plays"],
+    answer: 2,
+    explanation: "\"at the moment\" ใช้ Present Continuous → are playing"
+  },
+  {
+    q: "The old man _______ for a walk every evening.",
+    choices: ["go", "goes", "going", "gone"],
+    answer: 1,
+    explanation: "ประธานเอกพจน์ (The old man) ใน Present Simple เติม s ที่กริยา → goes"
+  },
+  {
+    q: "What _______ you doing right now?",
+    choices: ["is", "are", "do", "did"],
+    answer: 1,
+    explanation: "\"What are you doing?\" เป็นคำถามแบบ Present Continuous ใช้ are กับ you"
+  },
+  {
+    q: "He _______ science next year.",
+    choices: ["study", "studied", "will study", "studying"],
+    answer: 2,
+    explanation: "\"next year\" คืออนาคต ใช้ will + V1 → will study"
+  },
+  {
+    q: "We _______ lunch already.",
+    choices: ["have eaten", "ate", "eat", "has eaten"],
+    answer: 0,
+    explanation: "\"already\" ใช้ใน Present Perfect → have eaten (have + V3)"
+  },
+  {
+    q: "Would you like _______ some coffee?",
+    choices: ["have", "having", "to have", "has"],
+    answer: 2,
+    explanation: "would like + to + V1 เป็นโครงสร้างปกติ → to have"
+  },
+  {
+    q: "I _______ in Chiang Rai since 2015.",
+    choices: ["lived", "live", "have lived", "lives"],
+    answer: 2,
+    explanation: "since + ปี ใช้ Present Perfect → have lived"
+  },
+  {
+    q: "Let's _______ to the beach.",
+    choices: ["goes", "go", "going", "gone"],
+    answer: 1,
+    explanation: "หลัง Let's ต้องใช้ V1 → go"
+  },
+  {
+    q: "This cake tastes _______.",
+    choices: ["good", "well", "better", "best"],
+    answer: 0,
+    explanation: "taste เป็น linking verb ใช้ adjective (good) ไม่ใช่ adverb (well)"
+  },
+  {
+    q: "If I were you, I _______ take the job.",
+    choices: ["will", "would", "shall", "can"],
+    answer: 1,
+    explanation: "\"If I were you\" → โครงสร้าง Unreal Conditional ใช้ would"
+  },
+  {
+    q: "I'm going to _______ a book this evening.",
+    choices: ["read", "reading", "reads", "readed"],
+    answer: 0,
+    explanation: "going to + V1 แสดงการวางแผนในอนาคต → read"
+  },
+  {
+    q: "I enjoy _______ music when I'm free.",
+    choices: ["listening", "listen", "listened", "listens"],
+    answer: 0,
+    explanation: "enjoy + V-ing เป็นโครงสร้างปกติ → listening"
+  },
+  {
+    q: "\"I'm so tired.\" → \"You should _______ a rest.\"",
+    choices: ["took", "taking", "take", "takes"],
+    answer: 2,
+    explanation: "should + V1 ใช้ในประโยคแนะนำ → take"
+  },
+];
+// ─────────────────────────────────────────────────────────────────────────────
+
+const LABELS = ['A','B','C','D'];
+let chosen = [];
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startQuiz() {
+  chosen = new Array(questions.length).fill(-1);
+  const list = document.getElementById('q-list');
+  list.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `<p class="q-number">ข้อที่ ${qi + 1} จาก ${questions.length}</p><p class="q-text">${q.q}</p>`;
+    const choices = document.createElement('div');
+    choices.className = 'choices';
+    q.choices.forEach((c, ci) => {
+      const btn = document.createElement('div');
+      btn.className = 'choice';
+      btn.id = `c-${qi}-${ci}`;
+      btn.innerHTML = `<span class="choice-lbl">${LABELS[ci]}</span><span class="choice-body">${c}</span>`;
+      btn.onclick = () => pickChoice(qi, ci);
+      choices.appendChild(btn);
+    });
+    card.appendChild(choices);
+    list.appendChild(card);
+  });
+  updateProgress();
+  document.getElementById('warn-msg').classList.remove('show');
+  showScreen('quiz-screen');
+}
+
+function pickChoice(qi, ci) {
+  chosen[qi] = ci;
+  questions[qi].choices.forEach((_, i) => {
+    document.getElementById(`c-${qi}-${i}`).classList.toggle('selected', i === ci);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = chosen.filter(x => x >= 0).length;
+  document.getElementById('prog-fill').style.width = (done / questions.length * 100) + '%';
+  document.getElementById('prog-text').textContent = 'ตอบแล้ว ' + done + ' / ' + questions.length;
+}
+
+function submitQuiz() {
+  if (chosen.some(x => x < 0)) {
+    document.getElementById('warn-msg').classList.add('show');
+    const firstUnanswered = chosen.findIndex(x => x < 0);
+    document.querySelectorAll('.q-card')[firstUnanswered]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('warn-msg').classList.remove('show');
+
+  let score = 0;
+  questions.forEach((q, qi) => { if (chosen[qi] === q.answer) score++; });
+  const pct = Math.round(score / questions.length * 100);
+
+  const ring = document.getElementById('score-ring');
+  ring.className = 'score-ring ' + (pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'poor');
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-frac').textContent = score + ' / ' + questions.length + ' ข้อ';
+
+  const [title, msg] = pct >= 80
+    ? ['ยอดเยี่ยม! 🎉', 'คุณทำได้ดีมากเลยครับ']
+    : pct >= 50
+    ? ['พอใช้ได้ 👍', 'ยังมีที่ให้พัฒนาอีก ลองทำซ้ำดูนะครับ']
+    : ['ต้องฝึกเพิ่มอีกนิดนึง 📚', 'ลองทบทวนแล้วทำอีกครั้งนะครับ'];
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-msg').textContent = msg;
+  document.getElementById('r-correct').textContent = score + ' ข้อ';
+  document.getElementById('r-wrong').textContent = (questions.length - score) + ' ข้อ';
+
+  const cards = document.getElementById('review-cards');
+  cards.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const correct = chosen[qi] === q.answer;
+    const card = document.createElement('div');
+    card.className = 'rev-card';
+    const iconSvg = correct
+      ? `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+      : `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    let choicesHtml = '';
+    q.choices.forEach((c, ci) => {
+      let cls = '';
+      if (ci === q.answer) cls = 'correct';
+      else if (ci === chosen[qi]) cls = 'wrong';
+      if (cls) choicesHtml += `<div class="rv-choice ${cls}"><span class="rv-lbl">${LABELS[ci]}</span>${c}</div>`;
+    });
+    card.innerHTML = `
+      <div class="rv-top">
+        <div class="rv-icon ${correct ? 'ok' : 'bad'}">${iconSvg}</div>
+        <p class="rv-q">ข้อ ${qi + 1}: ${q.q}</p>
+      </div>
+      <div class="rv-choices">${choicesHtml}</div>
+      <div class="rv-exp">${q.explanation}</div>`;
+    cards.appendChild(card);
+  });
+
+  showScreen('result-screen');
+}
+
+function restartQuiz() { showScreen('start-screen'); }
+</script>
+</body>
+</html>
